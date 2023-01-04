@@ -25,6 +25,7 @@ function mySort(inputArr) {
 
     let position = 0;
     let outputArr = [];
+    outputArr.length = inputArr.length;
 
     for (let i = 0; i < inputArr.length; i++) {
         for (let j = 0; j < inputArr.length; j++) {
