@@ -13,37 +13,19 @@ Dodatno: Pokusaj analizirati koliki bi bio ukupni broj iteracija za niz proizvol
 
 let inputArr = [4, 2, 6, 4, 2, 1];
 
+// https://stackoverflow.com/questions/38331143/sort-an-array-containing-numbers-using-for-loop
 function mySort(inputArr) {
-
-    function fillEmptyIndex(arr) {
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] === undefined) {
-                arr[i] = arr[i - 1];
+    for (let i = 1; i < inputArr.length; i++) {
+        for (let j = 0; j < i; j++) {
+            if (inputArr[i] > inputArr[j]) {
+                let x = inputArr[i];
+                inputArr[i] = inputArr[j];
+                inputArr[j] = x;
             }
         }
     }
 
-    let position = 0;
-    let outputArr = [];
-    outputArr.length = inputArr.length;
-
-    for (let i = 0; i < inputArr.length; i++) {
-        for (let j = 0; j < inputArr.length; j++) {
-            if (i === j) {
-                continue;
-            }
-            //< descending > ascending     
-            if (inputArr[i] < inputArr[j]) {
-                position += 1;
-            }
-        }
-        outputArr[position] = inputArr[i];
-        position = 0;
-    }
-
-    fillEmptyIndex(outputArr);
-
-    return outputArr;
+    return inputArr;
 }
 
 /* 
@@ -64,13 +46,20 @@ Input: '(c * (a+b)) * (x - (y * (c - d)))'
 Output: true
 */
 
-let str = '(a+b * (c - d)';
+let str = ')( (a+b * (c - d)';
 
 function matchBrecket(someStr) {
-    let open = someStr.match(/\(/gm);
-    let closed = someStr.match(/\)/gm);
+    
+    let x = 0;
+    
+    for(let i = 0; i < str.length; i++) {
+        if(str[i] === '(') { x += 1 };
+        if(str[i] === ')') { x -= 1 };
+        if(x === -1) { return false };
+    }
 
-    return open.length === closed.length;
+    return x === 0;
+
 }
 
 /* 
@@ -95,7 +84,7 @@ sa prethodno navedenim hrvatskim recenicama.
 let tk = ['hello_world', 'first_week', 'something else', 'fail_result'];
 let ln = process.argv[2] || 'hr';
 
-function getToken(tk, language) {
+function getToken(tk, language = ln) {
 
     const Token = {
         hr: {
@@ -117,10 +106,9 @@ function getToken(tk, language) {
     }
 
     let sentenceOfToken = '';
-    language = ln;
 
     for (let index of tk) {
-        sentenceOfToken += Token[language][index] || Token.hr[index] || 'ERROR: UNDEFINED TOKEN.';
+        sentenceOfToken += Token[language]?.[index] || Token['hr'][index] || 'ERROR: UNDEFINED TOKEN.';
     }
 
     return sentenceOfToken;
